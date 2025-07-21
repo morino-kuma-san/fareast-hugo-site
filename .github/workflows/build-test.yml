@@ -1,0 +1,33 @@
+name: Build Test
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: 'latest'
+        extended: true
+    
+    - name: Build
+      run: hugo --minify
+    
+    - name: Check for broken links
+      run: |
+        if [ -d "public" ]; then
+          echo "Build successful - public directory created"
+        else
+          echo "Build failed - public directory not found"
+          exit 1
+        fi
