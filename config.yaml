@@ -1,0 +1,128 @@
+# Configuration file for Hugo
+baseURL: "http://localhost:1313/"
+languageCode: "ja"
+defaultContentLanguage: "ja"
+title: "ファーイースト国際特許事務所"
+theme: "blowfish"
+
+# Build configuration
+enableRobotsTXT: true
+hasCJKLanguage: true
+enableEmoji: true
+summaryLength: 20
+
+# Theme specific params
+params:
+  # Site description
+  description: "商標登録のプロフェッショナル - あなたのブランドを守り、価値を高める"
+  
+  # Header
+  header:
+    layout: "fixed-fill-blur"
+    logo: "/logo.png"
+    showTitle: true
+
+  # Footer
+  footer:
+    showCopyright: true
+    showThemeAttribution: true
+    showAppearanceSwitcher: true
+    showScrollToTop: true
+
+  # Homepage
+  homepage:
+    layout: "background"
+    homepageImage: ""
+    showRecent: true
+    recentLimit: 8
+    showRecentItems: 8
+    showMoreLink: true
+    showMoreLinkDest: "/posts"
+
+  # Article
+  article:
+    showDate: true
+    showDateUpdated: false
+    showAuthor: true
+    showBreadcrumbs: true
+    showDraftLabel: true
+    showEdit: false
+    editURL: ""
+    editAppendPath: true
+    showHeadingAnchors: true
+    showPagination: true
+    invertPagination: false
+    showReadingTime: true
+    showTableOfContents: true
+    showTaxonomies: true
+    showWordCount: false
+    showComments: false
+    sharingLinks: []
+
+  # List pages
+  list:
+    showBreadcrumbs: false
+    showSummary: true
+    showTableOfContents: false
+    showTaxonomies: false
+    groupByYear: false
+    paginationWidth: 1
+
+  # Appearance
+  colorScheme: "blowfish"
+  defaultAppearance: "light"
+  autoSwitchAppearance: true
+  enableSearch: true
+  enableCodeCopy: true
+
+# Menus
+menu:
+  main:
+    - name: "ホーム"
+      pageRef: "/"
+      weight: 10
+    - name: "商標登録とは"
+      pageRef: "/about-trademark"
+      weight: 20
+    - name: "サービス案内"
+      pageRef: "/services"
+      weight: 30
+    - name: "料金表"
+      pageRef: "/fee"
+      weight: 40
+    - name: "お客様の声"
+      pageRef: "/testimonials"
+      weight: 50
+    - name: "会社概要"
+      pageRef: "/company"
+      weight: 60
+    - name: "お問い合わせ"
+      pageRef: "/contact"
+      weight: 70
+
+# Taxonomies
+taxonomies:
+  tag: "tags"
+  category: "categories"
+  author: "authors"
+  series: "series"
+
+# Markup
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+
+# Security
+security:
+  enableInlineShortcodes: false
+  exec:
+    allow:
+      - ^go$
+      - ^npx$
+      - ^dart-sass-embedded$
