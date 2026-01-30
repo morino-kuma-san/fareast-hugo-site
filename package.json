@@ -1,0 +1,14 @@
+{
+  "name": "hugo-fareast-site-tests",
+  "version": "1.0.0",
+  "description": "Tests for Hugo fareast site",
+  "scripts": {
+    "build": "hugo --minify",
+    "test": "hugo --minify && jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "cheerio": "^1.0.0"
+  }
+}
