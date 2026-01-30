@@ -1,3 +1,4 @@
+<!-- HEADER_OVERRIDE_ACTIVE_20260130 -->
 {{/* Logo section */}}
 {{ define "HeaderLogo" }}
   {{ if .Site.Params.Logo }}
@@ -13,9 +14,8 @@
           {{ else }}
             <img
               src="{{ $logo.RelPermalink }}"
-              width="{{ div $logo.Width 2 }}"
-              height="{{ div $logo.Height 2 }}"
-              class="logo max-h-[1.5rem] max-w-[1.5rem] object-scale-down object-left nozoom"
+              class="logo block"
+              style="height:24px; width:auto; max-height:24px;"
               alt="{{ .Site.Title }}">
           {{ end }}
         </a>
