@@ -416,6 +416,16 @@
 @media (prefers-reduced-motion: no-preference){
   .sp-btn:hover{ filter: brightness(.985); }
 }
+
+/* honeypot: 画面外に配置してユーザーには見えないようにする */
+.sp-honeypot {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 </style>
 
 <main class="sp-landing">
@@ -569,7 +579,12 @@
 
       <div class="sp-formWrap">
 
-        <form class="sp-form" action="#" method="post">
+        <form class="sp-form" action="/api/sp-inquiry" method="POST">
+          <!-- honeypot: botは入力するが人間は触らない隠し項目 -->
+          <div class="sp-honeypot" aria-hidden="true">
+            <label for="hp_company">会社名（入力しないでください）</label>
+            <input type="text" id="hp_company" name="hp_company" tabindex="-1" autocomplete="off">
+          </div>
           <h3>必須項目</h3>
 
           <div class="sp-field">
@@ -611,8 +626,8 @@
           <h3>任意項目（推奨）</h3>
 
           <div class="sp-field">
-            <label class="sp-label" for="email_sub">予備メールアドレス</label>
-            <input class="sp-input" id="email_sub" name="email_sub" type="email" placeholder="サブのメールアドレス（任意）" autocomplete="email" inputmode="email">
+            <label class="sp-label" for="email_backup">予備メールアドレス</label>
+            <input class="sp-input" id="email_backup" name="email_backup" type="email" placeholder="サブのメールアドレス（任意）" autocomplete="email" inputmode="email">
             <div class="sp-help">メイン不達時の連絡先として推奨</div>
           </div>
 
@@ -621,8 +636,8 @@
               <span class="sp-label">ロゴの有無</span>
             </div>
             <div class="sp-radioGrid" role="radiogroup" aria-label="ロゴの有無">
-              <label class="sp-radio"><input type="radio" name="has_logo" value="no" checked> なし（文字のみ）</label>
-              <label class="sp-radio"><input type="radio" name="has_logo" value="yes"> あり（ロゴあり）</label>
+              <label class="sp-radio"><input type="radio" name="logo" value="no" checked> なし（文字のみ）</label>
+              <label class="sp-radio"><input type="radio" name="logo" value="yes"> あり（ロゴあり）</label>
             </div>
           </div>
 
@@ -638,8 +653,8 @@
           </div>
 
           <div class="sp-field">
-            <label class="sp-label" for="ref_url">参考URL</label>
-            <input class="sp-input" id="ref_url" name="ref_url" type="url" placeholder="https://example.com" inputmode="url" autocomplete="url">
+            <label class="sp-label" for="reference_url">参考URL</label>
+            <input class="sp-input" id="reference_url" name="reference_url" type="url" placeholder="https://example.com" inputmode="url" autocomplete="url">
             <div class="sp-help">商品・サービスの参考となるWebページ（任意）</div>
           </div>
 

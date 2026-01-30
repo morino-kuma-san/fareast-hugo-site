@@ -1,0 +1,15 @@
+[Unit]
+Description=SP Form Receiver (Hugo /sp)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/path/to/hugo_fareast_site/server/sp-form-receiver
+ExecStart=/usr/bin/node index.js
+Restart=always
+EnvironmentFile=/path/to/hugo_fareast_site/server/sp-form-receiver/.env
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

@@ -193,4 +193,99 @@ describe('/sp ページ生成テスト', () => {
       expect(metaDesc.length).toBeGreaterThan(0);
     });
   });
+
+  describe('10. フォーム送信設定（Phase1公開最低ライン）', () => {
+    test('formにmethod="POST"が設定されていること', () => {
+      const form = $('form');
+      const method = form.attr('method');
+      expect(method).toBeDefined();
+      expect(method.toUpperCase()).toBe('POST');
+    });
+
+    test('formのactionが"#"ではないこと', () => {
+      const form = $('form');
+      const action = form.attr('action');
+      expect(action).toBeDefined();
+      expect(action).not.toBe('#');
+    });
+
+    test('formのactionが"/api/sp-inquiry"であること', () => {
+      const form = $('form');
+      const action = form.attr('action');
+      expect(action).toBe('/api/sp-inquiry');
+    });
+  });
+
+  describe('11. honeypot（スパム対策）', () => {
+    test('honeypot入力欄（hp_company）が存在すること', () => {
+      const honeypot = $('input[name="hp_company"]');
+      expect(honeypot.length).toBe(1);
+    });
+
+    test('honeypotがユーザーに見えないよう隠されていること', () => {
+      const honeypotContainer = $('input[name="hp_company"]').closest('.sp-honeypot');
+      expect(honeypotContainer.length).toBe(1);
+    });
+  });
+});
+
+// /sp/thanks/ ページのテスト
+const THANKS_PAGE_PATH = path.join(__dirname, '../public/sp/thanks/index.html');
+
+describe('/sp/thanks/ ページ生成テスト', () => {
+  let $thanks;
+  let thanksHtmlContent;
+
+  beforeAll(() => {
+    if (!fs.existsSync(THANKS_PAGE_PATH)) {
+      throw new Error(`/sp/thanks/index.html が生成されていません: ${THANKS_PAGE_PATH}`);
+    }
+    thanksHtmlContent = fs.readFileSync(THANKS_PAGE_PATH, 'utf-8');
+    $thanks = cheerio.load(thanksHtmlContent);
+  });
+
+  describe('1. ページ生成', () => {
+    test('/sp/thanks/index.html が生成されていること', () => {
+      expect(fs.existsSync(THANKS_PAGE_PATH)).toBe(true);
+    });
+
+    test('HTMLが空でないこと', () => {
+      expect(thanksHtmlContent.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('2. ページ内容', () => {
+    test('「受付完了」が含まれること', () => {
+      const text = $thanks('body').text();
+      expect(text).toMatch(/受付完了/);
+    });
+
+    test('翌営業日までに連絡する旨の記載があること', () => {
+      const text = $thanks('body').text();
+      expect(text).toMatch(/翌営業日/);
+    });
+
+    test('/sp/に戻るリンクがあること', () => {
+      const backLink = $thanks('a[href="/sp/"]');
+      expect(backLink.length).toBeGreaterThan(0);
+    });
+
+    test('電話不可の注意書きがあること', () => {
+      const text = $thanks('body').text();
+      expect(text).toMatch(/電話/);
+    });
+  });
+
+  describe('3. メタ情報', () => {
+    test('タイトルタグが設定されていること', () => {
+      const title = $thanks('title').text();
+      expect(title.length).toBeGreaterThan(0);
+    });
+
+    test('meta descriptionが設定されていること', () => {
+      const metaDesc = $thanks('meta[name="description"]').attr('content');
+      expect(metaDesc).toBeDefined();
+      expect(metaDesc.length).toBeGreaterThan(0);
+    });
+  });
 });
