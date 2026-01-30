@@ -15,11 +15,13 @@ summaryLength: 20
 params:
   # Site description
   description: "商標登録のプロフェッショナル - あなたのブランドを守り、価値を高める"
-  
+
+  # Logo (params直下に配置 - Blowfishテーマの仕様)
+  logo: "images/logo.png"
+
   # Header
   header:
     layout: "fixed-fill-blur"
-    logo: "images/logo.png"
     showTitle: true
 
   # Footer
