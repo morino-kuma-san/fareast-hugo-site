@@ -19,7 +19,7 @@ params:
   # Header
   header:
     layout: "fixed-fill-blur"
-    logo: "/logo.png"
+    logo: "images/logo.png"
     showTitle: true
 
   # Footer
