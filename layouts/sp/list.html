@@ -1,441 +1,686 @@
+{{/* layouts/sp/list.html  — /sp専用LP（近代化版）
+   目的: Phase1の確定稿を維持しつつ、ファーストビューで「何のページか」を明確化し、
+         CTAを配置してLPとして成立させる。
+   注意: 送信先(action)はPhase1では仮置き。必要に応じて差し替えてください。
+*/}}
+
 {{ define "main" }}
-<article class="sp-page">
-  <!-- ===== 1. ファーストビュー（集客用コピー） ===== -->
-  <section class="sp-hero">
-    <div class="sp-hero-content">
-      <h1 class="sp-hero-title">
-        その商標、<br>
-        「出願してから後悔」する前に。
-      </h1>
-      <p class="sp-hero-subtitle">
-        <strong>弁理士 × 弁護士のダブルチェック視点で、<br>
-        登録リスクを一次判定します。</strong>
-      </p>
-      <div class="sp-hero-message">
-        <p>商標登録は、<strong>出願できるか</strong>より<br>
-        <strong>「あとで揉めないか」「使い続けられるか」</strong>が重要です。</p>
-        <p>当事務所の一次判定は、<strong>失敗を避けるための"入口"</strong>として設計されています。</p>
-      </div>
-      <ul class="sp-benefits">
-        <li>翌営業日までに一次判定</li>
-        <li>電話不要・すべて記録に残る</li>
-        <li>受付番号＋アクセスキー即発行（Phase2で実装予定）</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ===== 2. 一次判定の射程（分かること／分からないこと） ===== -->
-  <section class="sp-scope">
-    <h2>一次判定で分かること・分からないこと</h2>
-
-    <div class="sp-scope-grid">
-      <div class="sp-scope-can">
-        <h3>分かること</h3>
-        <ul>
-          <li>希望する商品・サービス分野で <strong>どんずばり競合する先行商標があるか</strong></li>
-          <li>審査基準上、<strong>明らかに危険な赤信号があるか</strong></li>
-        </ul>
-      </div>
-
-      <div class="sp-scope-cannot">
-        <h3>分からないこと</h3>
-        <ul>
-          <li>最終的な登録可否の断定</li>
-          <li>類否判断のグレーゾーンの結論</li>
-        </ul>
-      </div>
-    </div>
-
-    <p class="sp-scope-note">
-      だからこそ、必要な方には<strong>無料精査（B）</strong>をご案内します（Phase3以降で実装）。
-    </p>
-  </section>
-
-  <!-- ===== 3. フォーム直前：「入力が軽い理由」説明文 ===== -->
-  <section class="sp-why-simple">
-    <h2>入力が軽い理由</h2>
-
-    <p>このフォームは、<br>
-    <strong>商標登録の可否を最終判断するためのものではありません。</strong></p>
-
-    <p>あくまで、<br>
-    <strong>「出願してはいけない商標かどうか」</strong><br>
-    <strong>「明らかな赤信号が出ていないか」</strong><br>
-    を早い段階で確認するための、<strong>一次判定専用フォーム</strong>です。</p>
-
-    <p>この段階では、</p>
-    <ul>
-      <li>正式な会社名・住所</li>
-      <li>担当者の詳細情報</li>
-      <li>電話番号</li>
-      <li>出願書類に必要な細かい事項</li>
-    </ul>
-    <p>は取得していません。<br>
-    <strong>簡易判定では不要であり、ここで取得すると判断を誤る原因になる</strong>ためです。</p>
-
-    <p>一次判定では、</p>
-    <ul>
-      <li>商標（文字）</li>
-      <li>商品・サービスの内容</li>
-    </ul>
-    <p>という <strong>"判断に必要な最小限の情報"</strong> があれば、</p>
-    <ul>
-      <li>どんずばりの先行商標があるか</li>
-      <li>明らかに危険なケースに該当するか</li>
-    </ul>
-    <p>を確認できます。</p>
-
-    <p>判断が分かれる場合は、<br>
-    <strong>弁理士×弁護士による無料精査（B）</strong>をご案内します（Phase3以降）。</p>
-  </section>
-
-  <!-- ===== 4. 入力フォーム ===== -->
-  <section class="sp-form-section">
-    <h2>一次判定お申込みフォーム</h2>
-
-    <form id="sp-form" class="sp-form" action="#" method="POST">
-      <!-- 必須項目 -->
-      <fieldset class="sp-form-required">
-        <legend>必須項目</legend>
-
-        <div class="sp-form-group">
-          <label for="trademark">商標（文字）<span class="required">*必須</span></label>
-          <input type="text" id="trademark" name="trademark" required
-                 placeholder="例：ファーイースト">
-          <small>登録を希望する商標を入力してください</small>
-        </div>
-
-        <div class="sp-form-group">
-          <label for="goods_services">商品・サービス<span class="required">*必須</span></label>
-          <textarea id="goods_services" name="goods_services" rows="4" required
-                    placeholder="例：知的財産に関する調査、商標登録出願の代理"></textarea>
-          <small>この商標を使用する商品やサービスを具体的に記載してください</small>
-        </div>
-
-        <div class="sp-form-group">
-          <label for="email">メールアドレス<span class="required">*必須</span></label>
-          <input type="email" id="email" name="email" required
-                 placeholder="例：info@example.com">
-        </div>
-
-        <div class="sp-form-group">
-          <label for="email_confirm">メールアドレス（確認）<span class="required">*必須</span></label>
-          <input type="email" id="email_confirm" name="email_confirm" required
-                 placeholder="もう一度入力してください">
-        </div>
-      </fieldset>
-
-      <!-- 任意項目 -->
-      <fieldset class="sp-form-optional">
-        <legend>任意項目（推奨）</legend>
-
-        <div class="sp-form-group">
-          <label for="email_sub">予備メールアドレス</label>
-          <input type="email" id="email_sub" name="email_sub"
-                 placeholder="サブのメールアドレス（任意）">
-          <small>メイン不達時の連絡先として推奨</small>
-        </div>
-
-        <div class="sp-form-group">
-          <label>ロゴの有無</label>
-          <div class="sp-radio-group">
-            <label><input type="radio" name="has_logo" value="no"> なし（文字のみ）</label>
-            <label><input type="radio" name="has_logo" value="yes"> あり（ロゴあり）</label>
-          </div>
-        </div>
-
-        <div class="sp-form-group">
-          <label>使用状況</label>
-          <div class="sp-radio-group">
-            <label><input type="radio" name="usage_status" value="planned"> 使用予定</label>
-            <label><input type="radio" name="usage_status" value="in_use"> 使用中</label>
-            <label><input type="radio" name="usage_status" value="considering"> 検討中</label>
-          </div>
-        </div>
-
-        <div class="sp-form-group">
-          <label for="reference_url">参考URL</label>
-          <input type="url" id="reference_url" name="reference_url"
-                 placeholder="https://example.com">
-          <small>商品・サービスの参考となるWebページ（任意）</small>
-        </div>
-      </fieldset>
-
-      <!-- 送信ボタン -->
-      <div class="sp-form-submit">
-        <button type="submit" class="sp-submit-btn">一次判定を申し込む</button>
-      </div>
-
-      <!-- ===== 5. 免責・注意文（送信ボタン直下） ===== -->
-      <div class="sp-disclaimer">
-        <p>※ 本サービスは、公開情報をもとにした<strong>簡易的な一次判定</strong>です。</p>
-        <p>※ 最終的な登録可否や権利の安全性を保証するものではありません。</p>
-        <p>※ 類否判断や審査結果は、個別事情や審査官の判断により変わる場合があります。</p>
-        <p>※ 詳細な判断や失敗回避の確認には、<strong>無料精査（B）</strong>をご利用ください（Phase3以降）。</p>
-      </div>
-    </form>
-  </section>
-
-  <!-- ===== 6. 電話不可の理由 ===== -->
-  <section class="sp-no-phone">
-    <h2>電話でのお問い合わせについて</h2>
-
-    <div class="sp-no-phone-notice">
-      <p><strong>本サービスは電話不可とさせていただいております。</strong></p>
-    </div>
-
-    <h3>電話不可の理由</h3>
-    <ul>
-      <li>一次判定フォームでは、本人確認に必要な個人情報（住所・電話番号等）を取得していません</li>
-      <li>電話では本人確認ができず、第三者（競合含む）へ<strong>情報が誤交付されるリスク</strong>があります</li>
-      <li>すべてのやり取りを<strong>記録として残し、証跡を保持</strong>するためです</li>
-      <li>「言った言わない」を防止し、お客様と当事務所双方を守るための方針です</li>
-    </ul>
-
-    <p>結果の閲覧・ご質問は、<strong>マイページ内フォームのみ</strong>で承ります（Phase2以降で実装予定）。</p>
-  </section>
-
-</article>
-
 <style>
-/* SP Page Styles */
-.sp-page {
-  max-width: 800px;
+/* sp.css  — /sp landing page only
+   目的: 既存テーマに依存せず、/spだけを近代的なLPに見せる
+   使い方: list.html で <main class="sp-landing"> に包む（= 全スタイルをスコープ）
+*/
+
+.sp-landing{
+  /* Design tokens */
+  --sp-bg: #f8fafc;
+  --sp-surface: #ffffff;
+  --sp-surface-2: #f1f5f9;
+  --sp-text: #0f172a;
+  --sp-muted: #475569;
+  --sp-border: rgba(15, 23, 42, .12);
+  --sp-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+  --sp-radius: 18px;
+
+  --sp-accent: #1d4ed8;      /* blue */
+  --sp-accent-2: #0f766e;    /* teal */
+  --sp-danger: #b91c1c;      /* red */
+
+  --sp-container: 1120px;
+  --sp-gutter: 20px;
+
+  color: var(--sp-text);
+  background: var(--sp-bg);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+               "Noto Sans JP", Meiryo, Arial, sans-serif;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.sp-landing *{ box-sizing: border-box; }
+.sp-landing a{ color: inherit; }
+.sp-landing :focus-visible{
+  outline: 3px solid rgba(29, 78, 216, .35);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+.sp-container{
+  max-width: var(--sp-container);
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 0 var(--sp-gutter);
 }
 
-.sp-page section {
-  margin-bottom: 3rem;
-  padding: 2rem;
-  background: var(--color-neutral-100, #f5f5f5);
-  border-radius: 8px;
+.sp-section{
+  padding: clamp(26px, 3.4vw, 52px) 0;
 }
 
-/* Hero Section */
-.sp-hero {
-  background: linear-gradient(135deg, var(--color-primary-100, #e0f2fe) 0%, var(--color-primary-200, #bae6fd) 100%);
-  text-align: center;
-}
-
-.sp-hero-title {
-  font-size: 1.75rem;
-  line-height: 1.4;
-  margin-bottom: 1rem;
-  color: var(--color-neutral-900, #1a1a1a);
-}
-
-.sp-hero-subtitle {
-  font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-}
-
-.sp-hero-message {
-  margin-bottom: 1.5rem;
-  text-align: left;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.sp-benefits {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.sp-benefits li {
-  background: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-}
-
-.sp-benefits li::before {
-  content: "\2713 ";
-  color: green;
-}
-
-/* Scope Section */
-.sp-scope-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin: 1.5rem 0;
-}
-
-@media (max-width: 600px) {
-  .sp-scope-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.sp-scope-can {
-  background: #d4edda;
-  padding: 1rem;
-  border-radius: 8px;
-}
-
-.sp-scope-cannot {
-  background: #f8d7da;
-  padding: 1rem;
-  border-radius: 8px;
-}
-
-.sp-scope-can h3::before {
-  content: "\25CB ";
-  color: green;
-}
-
-.sp-scope-cannot h3::before {
-  content: "\00D7 ";
-  color: red;
-}
-
-.sp-scope-note {
-  text-align: center;
-  font-size: 1.1rem;
-  margin-top: 1.5rem;
-}
-
-/* Why Simple Section */
-.sp-why-simple ul {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
-}
-
-/* Form Section */
-.sp-form-section {
-  background: white;
-  border: 2px solid var(--color-primary-500, #0ea5e9);
-}
-
-.sp-form fieldset {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.sp-form legend {
-  font-weight: bold;
-  padding: 0 0.5rem;
-}
-
-.sp-form-group {
-  margin-bottom: 1.25rem;
-}
-
-.sp-form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-}
-
-.sp-form-group .required {
-  color: red;
-  font-size: 0.85rem;
-  margin-left: 0.5rem;
-}
-
-.sp-form-group input[type="text"],
-.sp-form-group input[type="email"],
-.sp-form-group input[type="url"],
-.sp-form-group textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.sp-form-group input:focus,
-.sp-form-group textarea:focus {
-  outline: none;
-  border-color: var(--color-primary-500, #0ea5e9);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
-}
-
-.sp-form-group small {
-  display: block;
-  margin-top: 0.25rem;
-  color: #666;
-  font-size: 0.85rem;
-}
-
-.sp-radio-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.sp-radio-group label {
+.sp-kicker{
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  font-weight: normal;
+  gap: 10px;
+  padding: 6px 12px;
+  border: 1px solid var(--sp-border);
+  border-radius: 999px;
+  background: rgba(255,255,255,.7);
+  color: var(--sp-muted);
+  font-weight: 700;
+  letter-spacing: .02em;
+  font-size: 13px;
 }
 
-.sp-form-submit {
-  text-align: center;
-  margin: 2rem 0;
+.sp-hero{
+  padding: clamp(28px, 4vw, 64px) 0;
+  border-bottom: 1px solid var(--sp-border);
+  background:
+    radial-gradient(1200px 500px at 10% 0%, rgba(29, 78, 216, .16), transparent 55%),
+    radial-gradient(900px 400px at 95% 10%, rgba(15, 118, 110, .14), transparent 55%),
+    linear-gradient(to bottom, rgba(255,255,255,.85), rgba(248,250,252,.95));
 }
 
-.sp-submit-btn {
-  background: var(--color-primary-600, #0284c7);
-  color: white;
-  border: none;
-  padding: 1rem 3rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.2s;
+.sp-heroGrid{
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: clamp(18px, 3vw, 28px);
+  align-items: start;
 }
 
-.sp-submit-btn:hover {
-  background: var(--color-primary-700, #0369a1);
+@media (max-width: 900px){
+  .sp-heroGrid{ grid-template-columns: 1fr; }
 }
 
-/* Disclaimer */
-.sp-disclaimer {
-  background: #fff3cd;
-  border: 1px solid #ffc107;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-top: 1.5rem;
+.sp-title{
+  margin: 14px 0 8px;
+  font-size: clamp(28px, 3.2vw, 44px);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
 }
 
-.sp-disclaimer p {
-  margin: 0.5rem 0;
-  font-size: 0.9rem;
+.sp-lead{
+  margin: 0 0 16px;
+  color: var(--sp-muted);
+  font-size: clamp(16px, 1.3vw, 18px);
 }
 
-/* No Phone Section */
-.sp-no-phone {
-  background: #f8d7da;
-  border: 2px solid #dc3545;
+.sp-chipList{
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.sp-no-phone-notice {
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  text-align: center;
-  margin-bottom: 1.5rem;
+.sp-chip{
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(29, 78, 216, .18);
+  background: rgba(29, 78, 216, .06);
+  font-size: 14px;
+  font-weight: 650;
 }
 
-.sp-no-phone ul {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
+.sp-ctaRow{
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.sp-no-phone li {
-  margin-bottom: 0.5rem;
+.sp-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--sp-border);
+  text-decoration: none;
+  font-weight: 800;
+  box-shadow: 0 1px 0 rgba(15,23,42,.03);
+  transition: transform .08s ease, filter .12s ease;
+  user-select: none;
+}
+
+.sp-btn:active{ transform: translateY(1px); }
+
+.sp-btnPrimary{
+  background: linear-gradient(135deg, var(--sp-accent), #0ea5e9);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+.sp-btnSecondary{
+  background: rgba(255,255,255,.75);
+}
+
+.sp-btnSmall{
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.sp-sideCard{
+  background: rgba(255,255,255,.7);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius);
+  box-shadow: var(--sp-shadow);
+  padding: 18px;
+}
+
+.sp-sideTitle{
+  margin: 0 0 10px;
+  font-size: 15px;
+  color: var(--sp-muted);
+  letter-spacing: .02em;
+}
+
+.sp-stepList{
+  margin: 0;
+  padding-left: 18px;
+  color: var(--sp-text);
+  font-weight: 650;
+}
+
+.sp-note{
+  margin-top: 10px;
+  color: var(--sp-muted);
+  font-size: 13px;
+}
+
+.sp-h2{
+  margin: 0 0 14px;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.sp-grid2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 760px){
+  .sp-grid2{ grid-template-columns: 1fr; }
+}
+
+.sp-card{
+  background: var(--sp-surface);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius);
+  box-shadow: var(--sp-shadow);
+  padding: 18px;
+}
+
+.sp-cardTitle{
+  margin: 0 0 10px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sp-pillGood, .sp-pillBad{
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--sp-border);
+  color: var(--sp-muted);
+  background: var(--sp-surface-2);
+}
+
+.sp-cardGood{ border-top: 4px solid rgba(15,118,110,.5); }
+.sp-cardBad{ border-top: 4px solid rgba(185,28,28,.45); }
+
+.sp-card ul{
+  margin: 0;
+  padding-left: 18px;
+  color: var(--sp-text);
+  font-weight: 650;
+}
+
+.sp-card li{ margin: 8px 0; }
+
+.sp-callout{
+  margin-top: 14px;
+  border: 1px solid var(--sp-border);
+  border-left: 4px solid var(--sp-accent-2);
+  background: rgba(15,118,110,.06);
+  border-radius: 14px;
+  padding: 14px 16px;
+  color: var(--sp-text);
+}
+
+.sp-callout strong{ font-weight: 900; }
+
+.sp-prose{
+  color: var(--sp-text);
+  max-width: 78ch;
+}
+
+.sp-prose p{ margin: 10px 0; }
+.sp-prose ul{ margin: 10px 0; padding-left: 18px; }
+
+.sp-divider{
+  height: 1px;
+  background: var(--sp-border);
+  margin: 22px 0;
+}
+
+.sp-formWrap{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.sp-form{
+  background: var(--sp-surface);
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius);
+  box-shadow: var(--sp-shadow);
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.sp-form h3{
+  margin: 0 0 8px;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.sp-field{
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.sp-labelRow{
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.sp-label{
+  font-weight: 850;
+}
+
+.sp-required{
+  font-size: 12px;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(185, 28, 28, .22);
+  background: rgba(185, 28, 28, .06);
+  color: var(--sp-danger);
+}
+
+.sp-help{
+  font-size: 13px;
+  color: var(--sp-muted);
+}
+
+.sp-input, .sp-textarea, .sp-select{
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--sp-border);
+  background: #ffffff;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.sp-textarea{ min-height: 120px; resize: vertical; }
+
+.sp-input:focus, .sp-textarea:focus, .sp-select:focus{
+  outline: none;
+  border-color: rgba(29, 78, 216, .55);
+  box-shadow: 0 0 0 4px rgba(29, 78, 216, .14);
+}
+
+.sp-radioGrid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 760px){
+  .sp-radioGrid{ grid-template-columns: 1fr; }
+}
+
+.sp-radio{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--sp-border);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.7);
+}
+
+.sp-submitRow{
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.sp-submitRow .sp-btnPrimary{
+  min-width: min(360px, 100%);
+}
+
+.sp-legal{
+  margin-top: 14px;
+  border: 1px solid var(--sp-border);
+  border-left: 4px solid rgba(29,78,216,.55);
+  background: rgba(29,78,216,.05);
+  border-radius: 14px;
+  padding: 12px 14px;
+  color: var(--sp-text);
+  font-size: 14px;
+}
+
+.sp-legal ul{
+  margin: 0;
+  padding-left: 18px;
+}
+
+.sp-legal li{ margin: 6px 0; }
+
+.sp-phoneBox{
+  margin-top: 16px;
+  border: 1px solid var(--sp-border);
+  border-left: 4px solid rgba(185,28,28,.45);
+  background: rgba(185,28,28,.05);
+  border-radius: 14px;
+  padding: 16px 16px;
+}
+
+.sp-phoneBox h3{
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.sp-phoneBox p, .sp-phoneBox li{ color: var(--sp-text); }
+.sp-phoneBox ul{ margin: 10px 0 0; padding-left: 18px; }
+
+.sp-footerNote{
+  margin-top: 18px;
+  color: var(--sp-muted);
+  font-size: 13px;
+}
+
+/* Small utility: keep buttons pleasant on hover (but respect reduced motion) */
+@media (prefers-reduced-motion: no-preference){
+  .sp-btn:hover{ filter: brightness(.985); }
 }
 </style>
 
+<main class="sp-landing">
+
+  <!-- HERO -->
+  <section class="sp-hero">
+    <div class="sp-container">
+      <div class="sp-heroGrid">
+
+        <div>
+          <div class="sp-kicker" aria-label="ページ種別">
+            簡易商標調査（一次判定）｜申込みフォーム
+          </div>
+
+          <h1 class="sp-title">
+            その商標、<br>「出願してから後悔」する前に。
+          </h1>
+
+          <p class="sp-lead">
+            <strong>弁理士 × 弁護士</strong>のダブルチェック視点で、<br>
+            登録リスクを一次判定します。
+          </p>
+
+          <p class="sp-prose" style="margin:0">
+            商標登録は、<strong>出願できるか</strong>より<br>
+            <strong>「あとで揉めないか」「使い続けられるか」</strong>が重要です。<br>
+            当事務所の一次判定は、<strong>失敗を避けるための"入口"</strong>として設計されています。
+          </p>
+
+          <ul class="sp-chipList" aria-label="特徴">
+            <li class="sp-chip">翌営業日までに一次判定</li>
+            <li class="sp-chip">電話不要・すべて記録に残る</li>
+            <li class="sp-chip">受付番号＋アクセスキー即発行（Phase2で実装予定）</li>
+          </ul>
+
+          <div class="sp-ctaRow">
+            <a class="sp-btn sp-btnPrimary" href="#apply">一次判定を申し込む</a>
+            <a class="sp-btn sp-btnSecondary" href="#scope">分かること／分からないこと</a>
+          </div>
+
+          <p class="sp-note">
+            ※ 本サービスは、公開情報をもとにした<strong>簡易的な一次判定</strong>です（最終判断ではありません）。
+          </p>
+        </div>
+
+        <aside class="sp-sideCard" aria-label="流れの要点">
+          <p class="sp-sideTitle">このページでできること</p>
+          <ol class="sp-stepList">
+            <li>必要最小限の情報で申込み</li>
+            <li>翌営業日までに一次判定</li>
+            <li>必要に応じて無料精査（B）へ</li>
+          </ol>
+          <div class="sp-divider" role="presentation"></div>
+          <p class="sp-sideTitle" style="margin-bottom:6px">まず押さえる前提</p>
+          <p class="sp-note" style="margin:0">
+            一次判定は「明らかな赤信号」の有無を確認するための入口です。<br>
+            グレーゾーンの結論や最終判断は、次の工程で行います。
+          </p>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCOPE -->
+  <section id="scope" class="sp-section">
+    <div class="sp-container">
+      <h2 class="sp-h2">一次判定で分かること・分からないこと</h2>
+
+      <div class="sp-grid2" role="list">
+        <div class="sp-card sp-cardGood" role="listitem">
+          <h3 class="sp-cardTitle"><span class="sp-pillGood">分かること</span></h3>
+          <ul>
+            <li>希望する商品・サービス分野で<strong>どんずばり競合する先行商標</strong>があるか</li>
+            <li>審査基準上、<strong>明らかに危険な赤信号</strong>があるか</li>
+          </ul>
+        </div>
+
+        <div class="sp-card sp-cardBad" role="listitem">
+          <h3 class="sp-cardTitle"><span class="sp-pillBad">分からないこと</span></h3>
+          <ul>
+            <li>最終的な登録可否の断定</li>
+            <li>類否判断のグレーゾーンの結論</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sp-callout">
+        だからこそ、必要な方には<strong>無料精査（B）</strong>をご案内します（Phase3以降で実装）。
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY LIGHT -->
+  <section class="sp-section">
+    <div class="sp-container">
+      <h2 class="sp-h2">入力が軽い理由</h2>
+
+      <div class="sp-card sp-prose">
+        <p>
+          このフォームは、<br>
+          <strong>商標登録の可否を最終判断するためのものではありません。</strong>
+        </p>
+
+        <p>
+          あくまで、<br>
+          <strong>「出願してはいけない商標かどうか」</strong><br>
+          <strong>「明らかな赤信号が出ていないか」</strong><br>
+          を早い段階で確認するための、<strong>一次判定専用フォーム</strong>です。
+        </p>
+
+        <p>この段階では、</p>
+        <ul>
+          <li>正式な会社名・住所</li>
+          <li>担当者の詳細情報</li>
+          <li>電話番号</li>
+          <li>出願書類に必要な細かい事項</li>
+        </ul>
+        <p>
+          は取得していません。<br>
+          <strong>簡易判定では不要であり、ここで取得すると判断を誤る原因になる</strong>ためです。
+        </p>
+
+        <p>
+          一次判定では、<br>
+          <strong>商標（文字）</strong><br>
+          <strong>商品・サービスの内容</strong><br>
+          という<strong> "判断に必要な最小限の情報"</strong> があれば、<br>
+          <strong>どんずばりの先行商標があるか</strong><br>
+          <strong>明らかに危険なケースに該当するか</strong><br>
+          を確認できます。
+        </p>
+
+        <p>
+          判断が分かれる場合は、<br>
+          <strong>弁理士×弁護士による無料精査（B）</strong>をご案内します（Phase3以降）。
+        </p>
+
+        <div class="sp-callout" style="border-left-color: rgba(29,78,216,.55); background: rgba(29,78,216,.05);">
+          ポイント：このページの目的は「出願前に危ないパターンを早期に避ける」ことです。<br>
+          申込み前提の個人情報（住所・電話番号など）は扱いません。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORM -->
+  <section id="apply" class="sp-section">
+    <div class="sp-container">
+      <h2 class="sp-h2">一次判定お申込みフォーム</h2>
+
+      <div class="sp-formWrap">
+
+        <form class="sp-form" action="#" method="post">
+          <h3>必須項目</h3>
+
+          <div class="sp-field">
+            <div class="sp-labelRow">
+              <label class="sp-label" for="trademark_text">商標（文字）</label>
+              <span class="sp-required">必須</span>
+            </div>
+            <input class="sp-input" id="trademark_text" name="trademark_text" type="text" placeholder="例：ファーイースト" autocomplete="organization" required>
+            <div class="sp-help">登録を希望する商標を入力してください</div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-labelRow">
+              <label class="sp-label" for="goods_services">商品・サービス</label>
+              <span class="sp-required">必須</span>
+            </div>
+            <textarea class="sp-textarea" id="goods_services" name="goods_services" placeholder="例：知的財産に関する調査、商標登録出願の代理" required></textarea>
+            <div class="sp-help">この商標を使用する商品やサービスを具体的に記載してください</div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-labelRow">
+              <label class="sp-label" for="email">メールアドレス</label>
+              <span class="sp-required">必須</span>
+            </div>
+            <input class="sp-input" id="email" name="email" type="email" placeholder="例：info@example.com" autocomplete="email" inputmode="email" required>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-labelRow">
+              <label class="sp-label" for="email_confirm">メールアドレス（確認）</label>
+              <span class="sp-required">必須</span>
+            </div>
+            <input class="sp-input" id="email_confirm" name="email_confirm" type="email" placeholder="もう一度入力してください" autocomplete="email" inputmode="email" required>
+          </div>
+
+          <div class="sp-divider" role="presentation"></div>
+
+          <h3>任意項目（推奨）</h3>
+
+          <div class="sp-field">
+            <label class="sp-label" for="email_sub">予備メールアドレス</label>
+            <input class="sp-input" id="email_sub" name="email_sub" type="email" placeholder="サブのメールアドレス（任意）" autocomplete="email" inputmode="email">
+            <div class="sp-help">メイン不達時の連絡先として推奨</div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-labelRow">
+              <span class="sp-label">ロゴの有無</span>
+            </div>
+            <div class="sp-radioGrid" role="radiogroup" aria-label="ロゴの有無">
+              <label class="sp-radio"><input type="radio" name="has_logo" value="no" checked> なし（文字のみ）</label>
+              <label class="sp-radio"><input type="radio" name="has_logo" value="yes"> あり（ロゴあり）</label>
+            </div>
+          </div>
+
+          <div class="sp-field">
+            <div class="sp-labelRow">
+              <span class="sp-label">使用状況</span>
+            </div>
+            <div class="sp-radioGrid" role="radiogroup" aria-label="使用状況">
+              <label class="sp-radio"><input type="radio" name="usage_status" value="planned" checked> 使用予定</label>
+              <label class="sp-radio"><input type="radio" name="usage_status" value="using"> 使用中</label>
+              <label class="sp-radio"><input type="radio" name="usage_status" value="considering"> 検討中</label>
+            </div>
+          </div>
+
+          <div class="sp-field">
+            <label class="sp-label" for="ref_url">参考URL</label>
+            <input class="sp-input" id="ref_url" name="ref_url" type="url" placeholder="https://example.com" inputmode="url" autocomplete="url">
+            <div class="sp-help">商品・サービスの参考となるWebページ（任意）</div>
+          </div>
+
+          <div class="sp-submitRow">
+            <button class="sp-btn sp-btnPrimary" type="submit">一次判定を申し込む</button>
+            <a class="sp-btn sp-btnSecondary sp-btnSmall" href="#scope">射程をもう一度確認</a>
+          </div>
+
+          <!-- 免責・注意文（送信ボタン直下：Phase1の要件） -->
+          <div class="sp-legal" role="note" aria-label="免責・注意事項">
+            <ul>
+              <li>本サービスは、公開情報をもとにした<strong>簡易的な一次判定</strong>です。</li>
+              <li>最終的な登録可否や権利の安全性を保証するものではありません。</li>
+              <li>類否判断や審査結果は、個別事情や審査官の判断により変わる場合があります。</li>
+              <li>詳細な判断や失敗回避の確認には、<strong>無料精査（B）</strong>をご利用ください（Phase3以降）。</li>
+            </ul>
+          </div>
+
+        </form>
+
+        <aside class="sp-phoneBox" aria-label="電話でのお問い合わせについて">
+          <h3>電話でのお問い合わせについて</h3>
+          <p><strong>本サービスは電話不可</strong>とさせていただいております。</p>
+
+          <p style="margin:10px 0 0; font-weight:850;">電話不可の理由</p>
+          <ul>
+            <li>一次判定フォームでは、本人確認に必要な個人情報（住所・電話番号等）を取得していません</li>
+            <li>電話では本人確認ができず、第三者（競合含む）へ情報が誤交付されるリスクがあります</li>
+            <li>すべてのやり取りを記録として残し、証跡を保持するためです</li>
+            <li>「言った言わない」を防止し、お客様と当事務所双方を守るための方針です</li>
+          </ul>
+
+          <p class="sp-footerNote">
+            結果の閲覧・ご質問は、<strong>マイページ内フォームのみ</strong>で承ります（Phase2以降で実装予定）。
+          </p>
+        </aside>
+
+      </div>
+
+    </div>
+  </section>
+
+</main>
 {{ end }}
