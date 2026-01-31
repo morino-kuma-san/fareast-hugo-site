@@ -1,0 +1,33 @@
+services:
+  hugo:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        # ここで Hugo 版本を固定（Git 管理）
+        HUGO_VERSION: "0.152.2"
+    working_dir: /work
+    # host 側のファイル所有権を壊さないために、host の UID/GID で実行
+    user: "${UID}:${GID}"
+    environment:
+      TZ: "${TZ:-Asia/Tokyo}"
+      HUGO_ENVIRONMENT: "${HUGO_ENVIRONMENT:-development}"
+      HUGO_BASEURL: "${HUGO_BASEURL:-http://localhost:1313/}"
+      HUGO_CACHEDIR: "/cache/hugo"
+    ports:
+      # host 側のバインドIPを .env で制御（原則 127.0.0.1 推奨）
+      - "${BIND_IP:-127.0.0.1}:${HOST_PORT:-1313}:1313"
+    volumes:
+      - .:/work
+      - ./.docker-cache:/cache
+    command:
+      [
+        "hugo",
+        "server",
+        "--bind", "0.0.0.0",
+        "--port", "1313",
+        "--baseURL", "${HUGO_BASEURL}",
+        "--environment", "${HUGO_ENVIRONMENT}",
+        "--disableFastRender",
+        "--ignoreCache"
+      ]
