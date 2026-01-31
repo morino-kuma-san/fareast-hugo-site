@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
@@ -98,36 +100,43 @@ async function main() {
 
       fs.writeFileSync(absPath, JSON.stringify(payload, null, 2), "utf8");
 
+      // メール通知（ベストエフォート：失敗してもJSON保存は完了しているので続行）
       const adminEmail = (process.env.ADMIN_EMAIL || "").trim();
-      if (!adminEmail) {
-        // 受領はできているが通知できないのは事故なので 500 にする（=気づける）
-        return res.status(500).send("ADMIN_EMAIL missing");
+      if (adminEmail) {
+        try {
+          const mailFrom = (process.env.MAIL_FROM || "no-reply@example.com").trim();
+          const subject = `一次判定 /sp 受付: ${trademark_text}`;
+          const text =
+            `一次判定の申込みを受領しました。\n\n` +
+            `受領日時: ${payload.received_at}\n` +
+            `IP: ${payload.ip}\n` +
+            `UA: ${payload.user_agent}\n\n` +
+            `商標（文字）: ${payload.form.trademark_text}\n` +
+            `商品・サービス: ${payload.form.goods_services}\n` +
+            `メール: ${payload.form.email}\n` +
+            `予備メール: ${payload.form.email_backup}\n` +
+            `ロゴ: ${payload.form.logo}\n` +
+            `使用状況: ${payload.form.usage_status}\n` +
+            `参考URL: ${payload.form.reference_url}\n\n` +
+            `保存先: ${absPath}\n`;
+
+          const transport = await createTransport();
+          await transport.sendMail({
+            from: mailFrom,
+            to: adminEmail,
+            subject,
+            text
+          });
+          console.log(`[mail] notification sent to ${adminEmail}`);
+        } catch (mailErr) {
+          // メール送信失敗はログのみ（JSON保存は成功しているので続行）
+          console.error(`[mail] failed to send notification:`, mailErr.message);
+        }
+      } else {
+        console.warn(`[mail] ADMIN_EMAIL not set, skipping notification`);
       }
 
-      const mailFrom = (process.env.MAIL_FROM || "no-reply@example.com").trim();
-      const subject = `一次判定 /sp 受付: ${trademark_text}`;
-      const text =
-        `一次判定の申込みを受領しました。\n\n` +
-        `受領日時: ${payload.received_at}\n` +
-        `IP: ${payload.ip}\n` +
-        `UA: ${payload.user_agent}\n\n` +
-        `商標（文字）: ${payload.form.trademark_text}\n` +
-        `商品・サービス: ${payload.form.goods_services}\n` +
-        `メール: ${payload.form.email}\n` +
-        `予備メール: ${payload.form.email_backup}\n` +
-        `ロゴ: ${payload.form.logo}\n` +
-        `使用状況: ${payload.form.usage_status}\n` +
-        `参考URL: ${payload.form.reference_url}\n\n` +
-        `保存先: ${absPath}\n`;
-
-      const transport = await createTransport();
-      await transport.sendMail({
-        from: mailFrom,
-        to: adminEmail,
-        subject,
-        text
-      });
-
+      console.log(`[saved] ${absPath}`);
       // 送信完了ページへ
       return res.redirect(303, "/sp/thanks/");
     } catch (e) {
