@@ -1,0 +1,78 @@
+# nginx 設定例: ローカル開発用（ポート8080）
+# 使用方法:
+#   1. このファイルを /etc/nginx/sites-available/ にコピー
+#   2. root のパスを自宅環境に合わせて編集
+#   3. /etc/nginx/sites-enabled/ にシンボリックリンク作成
+#   4. nginx -t && systemctl reload nginx
+
+server {
+    listen 8080;
+    server_name localhost;
+
+    # === 自宅環境に合わせてパスを編集 ===
+    root /home/yasuhiro/ドキュメント/fareast-hugo-site/hugo_fareast_site/public;
+
+    index index.html;
+
+    # 静的ファイル（Hugo生成）
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # /api/sp-inquiry → Node(8787)
+    location = /api/sp-inquiry {
+        limit_except POST { deny all; }
+
+        proxy_pass http://127.0.0.1:8787;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        client_max_body_size 64k;
+    }
+
+    # /mypage → Node(8787) + rate limit
+    location ^~ /mypage {
+        # rate limit（ブルートフォース対策）
+        # limit_req zone=mypage burst=10 nodelay;
+        # ※ limit_req_zone は http ブロックで定義が必要:
+        # limit_req_zone $binary_remote_addr zone=mypage:10m rate=30r/m;
+
+        proxy_pass http://127.0.0.1:8787;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        client_max_body_size 64k;
+
+        limit_except GET POST { deny all; }
+    }
+
+    # /staff → Node(8787) + Basic認証
+    location ^~ /staff {
+        # ローカル開発では IP制限なし（LAN内のみの場合は追加）
+        # allow 127.0.0.1;
+        # deny all;
+
+        auth_basic "Staff Only";
+        auth_basic_user_file /etc/nginx/.htpasswd_staff;
+
+        proxy_pass http://127.0.0.1:8787;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        limit_except GET POST { deny all; }
+    }
+
+    # ヘルスチェック
+    location = /healthz {
+        proxy_pass http://127.0.0.1:8787;
+    }
+}
