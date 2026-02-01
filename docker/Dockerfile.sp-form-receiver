@@ -1,0 +1,33 @@
+# syntax=docker/dockerfile:1
+FROM node:20-bookworm-slim
+
+# better-sqlite3 のビルドに必要なツール
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# package*.json を先にコピーして依存関係をキャッシュ
+COPY server/sp-form-receiver/package*.json ./
+
+# 依存関係インストール（better-sqlite3 のビルド含む）
+RUN npm ci --only=production
+
+# ソースコードをコピー
+COPY server/sp-form-receiver/index.js ./
+
+# データディレクトリ作成
+RUN mkdir -p /app/data
+
+ENV TZ=Asia/Tokyo
+ENV PORT=8787
+ENV BIND_HOST=0.0.0.0
+
+EXPOSE 8787
+
+# ヘルスチェック
+HEALTHCHECK --interval=10s --timeout=3s --retries=10 \
+  CMD node -e "require('http').get('http://127.0.0.1:8787/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"
+
+CMD ["node", "index.js"]

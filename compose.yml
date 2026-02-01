@@ -1,4 +1,7 @@
 services:
+  # ============================================================
+  # Hugo dev server (default profile)
+  # ============================================================
   hugo:
     build:
       context: .
@@ -31,3 +34,46 @@ services:
         "--disableFastRender",
         "--ignoreCache"
       ]
+
+  # ============================================================
+  # sp-form-receiver API (profile: api)
+  # ============================================================
+  sp-form-receiver:
+    profiles: ["api"]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.sp-form-receiver
+    user: "${UID}:${GID}"
+    environment:
+      TZ: "${TZ:-Asia/Tokyo}"
+      PORT: "8787"
+      SESSION_SECRET: "${SP_FORM_SESSION_SECRET:-change-me}"
+      DB_PATH: "${SP_FORM_DB_PATH:-/app/data/spform.db}"
+      DATA_DIR: "${SP_FORM_DATA_DIR:-/app/data}"
+      ADMIN_EMAIL: "${SP_FORM_ADMIN_EMAIL:-admin@example.com}"
+      MAIL_FROM: "${SP_FORM_MAIL_FROM:-no-reply@example.com}"
+      MAIL_REQUIRED: "${SP_FORM_MAIL_REQUIRED:-false}"
+      SMTP_HOST: "${SP_FORM_SMTP_HOST:-mailhog}"
+      SMTP_PORT: "${SP_FORM_SMTP_PORT:-1025}"
+      SMTP_SECURE: "${SP_FORM_SMTP_SECURE:-false}"
+      SMTP_USER: "${SP_FORM_SMTP_USER:-}"
+      SMTP_PASS: "${SP_FORM_SMTP_PASS:-}"
+    ports:
+      - "${SP_FORM_BIND_IP:-127.0.0.1}:${SP_FORM_PORT:-8787}:8787"
+    volumes:
+      # データ永続化（DB + JSON）
+      - ./server/sp-form-receiver/data:/app/data
+    depends_on:
+      mailhog:
+        condition: service_started
+        required: false
+
+  # ============================================================
+  # MailHog - 開発用メールサーバー (profile: dev)
+  # ============================================================
+  mailhog:
+    profiles: ["dev"]
+    image: mailhog/mailhog
+    ports:
+      - "${MAILHOG_WEB_PORT:-8025}:8025"
+      - "${MAILHOG_SMTP_PORT:-1025}:1025"

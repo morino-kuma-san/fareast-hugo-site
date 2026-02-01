@@ -157,7 +157,11 @@ async function createTransport() {
   const host = process.env.SMTP_HOST?.trim(), port = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined;
   const secure = String(process.env.SMTP_SECURE || "false").toLowerCase() === "true";
   const user = process.env.SMTP_USER?.trim(), pass = process.env.SMTP_PASS?.trim();
-  if (host && port && user && pass) return nodemailer.createTransport({ host, port, secure, auth: { user, pass } });
+  if (host && port) {
+    const opts = { host, port, secure };
+    if (user && pass) opts.auth = { user, pass };
+    return nodemailer.createTransport(opts);
+  }
   return nodemailer.createTransport({ sendmail: true, newline: "unix", path: "/usr/sbin/sendmail" });
 }
 
@@ -497,7 +501,8 @@ async function main() {
   });
 
   const port = process.env.PORT ? Number(process.env.PORT) : 8787;
-  app.listen(port, "127.0.0.1", () => { console.log(`[sp-form-receiver] listening on http://127.0.0.1:${port}`); if (mailRequired) console.log(`[sp-form-receiver] MAIL_REQUIRED=true`); });
+  const bindHost = process.env.BIND_HOST || "127.0.0.1";
+  app.listen(port, bindHost, () => { console.log(`[sp-form-receiver] listening on http://${bindHost}:${port}`); if (mailRequired) console.log(`[sp-form-receiver] MAIL_REQUIRED=true`); });
 }
 
 main().catch(e => { console.error(e); process.exit(1); });
