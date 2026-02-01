@@ -377,3 +377,165 @@ docker compose --profile api --profile dev logs -f
 | nohup 起動が不要 | 完了 |
 | フォーム送信テスト成功（nginx経由） | 完了 |
 
+---
+
+## 追加作業: Git Push とコンフリクト解決（2026-02-01 夕方）
+
+### 8. SSH鍵によるGitHub認証設定
+
+#### 問題
+- GitHubはパスワード認証を廃止済み
+- HTTPS経由でのpushが失敗
+
+#### 解決
+既存のSSH鍵を使用：
+```bash
+# SSH鍵の確認
+ls -la ~/.ssh/id_*.pub
+# → /home/yasuhiro/.ssh/id_ed25519.pub が存在
+
+# SSH接続テスト
+ssh -T git@github.com
+# → Hi morino-kuma-san! You've successfully authenticated
+
+# リモートURLをSSHに変更
+git remote set-url origin git@github.com:morino-kuma-san/fareast-hugo-site.git
+```
+
+### 9. コンフリクト解決
+
+#### 発生状況
+- 職場サーバー（zerofighter）側でも同様のDocker Compose統合が実施されていた
+- `git pull --rebase` でコンフリクト発生
+
+#### コンフリクトファイル
+1. `compose.yml`
+2. `server/sp-form-receiver/index.js`
+
+#### 解決方針
+職場サーバー側の実装を採用：
+- `docker/Dockerfile.sp-form-receiver` を使用（職場側が作成）
+- 環境変数名に `SP_FORM_` プレフィックス付き
+- `bindHost` 変数名を採用
+
+```bash
+# コンフリクト解決後
+git add compose.yml server/sp-form-receiver/index.js
+git rebase --continue
+git push origin dockerize-hugo
+```
+
+### 10. .env 更新（職場側の設定に合わせる）
+
+#### 新しい環境変数名（SP_FORM_プレフィックス）
+```env
+# ========== sp-form-receiver (profile: api) ==========
+SP_FORM_PORT=8787
+SP_FORM_BIND_IP=127.0.0.1
+SP_FORM_SESSION_SECRET=83c6119c1987e4766a0d973a72025f470aecf8b71e35eea9723da4ed6d1f1623
+SP_FORM_DB_PATH=/app/data/spform.db
+SP_FORM_DATA_DIR=/app/data
+SP_FORM_ADMIN_EMAIL=admin@example.com
+SP_FORM_MAIL_FROM=no-reply@example.com
+SP_FORM_MAIL_REQUIRED=false
+SP_FORM_SMTP_HOST=mailhog
+SP_FORM_SMTP_PORT=1025
+SP_FORM_SMTP_SECURE=false
+SP_FORM_SMTP_USER=
+SP_FORM_SMTP_PASS=
+
+# ========== MailHog (profile: dev) ==========
+MAILHOG_WEB_PORT=8025
+MAILHOG_SMTP_PORT=1025
+```
+
+### 11. 再ビルド・動作確認
+
+```bash
+# 既存コンテナ停止
+docker compose --profile api --profile dev down
+
+# 再ビルド・起動
+docker compose --profile api --profile dev up -d --build
+```
+
+#### 最終動作確認結果
+| サービス | ポート | 結果 |
+|---------|-------|------|
+| Hugo | 1313 | 200 OK |
+| sp-form-receiver | 8787 | 200 OK |
+| MailHog | 8025 | 200 OK |
+| nginx | 8080 | 200 OK |
+
+#### フォーム送信テスト
+| 項目 | 結果 |
+|------|------|
+| 送信 | 成功 (303リダイレクト) |
+| 受付番号 | `20260201-d528a76c74` |
+| DB登録 | 完了 |
+| メール送信 | 完了 |
+
+---
+
+## 職場での作業再開手順
+
+### 職場デスクトップPCでの手順
+
+```bash
+# 1. リポジトリに移動
+cd <リポジトリパス>
+
+# 2. 最新を取得
+git fetch origin
+git checkout dockerize-hugo
+git pull origin dockerize-hugo
+
+# 3. .env 作成
+cp .env.example .env
+
+# 4. SESSION_SECRET を生成して .env に設定
+openssl rand -hex 32
+# → 出力値を SP_FORM_SESSION_SECRET に設定
+
+# 5. キャッシュディレクトリ作成
+mkdir -p .docker-cache/npm .docker-cache/hugo
+
+# 6. 起動
+docker compose --profile api --profile dev up -d --build
+
+# 7. 動作確認
+curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:1313/
+curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8787/healthz
+curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8025/
+```
+
+---
+
+## 現在のブランチ状況
+
+```
+dockerize-hugo (pushed to origin)
+```
+
+### コミット履歴
+```
+3fc48b8 feat: Docker Compose 統合 (sp-form-receiver + mailhog)
+bed41f1 feat(docker): add sp-form-receiver & mailhog to compose (職場側)
+883a390 docs: add info_request_20260201 with Docker setup response
+8f22738 Dockerize Hugo dev environment (compose + pinned Hugo version)
+```
+
+---
+
+## 作成・変更したファイル（最終）
+
+| ファイル | 操作 |
+|---------|------|
+| `compose.yml` | 変更（職場側の変更を採用） |
+| `server/sp-form-receiver/index.js` | 変更（bindHost変数名を採用） |
+| `.env` | 更新（SP_FORM_プレフィックス対応） |
+| `work_log_20260131.md` | 新規作成 |
+| `work_log_20260201.md` | 新規作成 |
+| `info_request_20260201.md` | 新規作成 |
+| その他ドキュメント | push済み |
+
